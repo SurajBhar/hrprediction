@@ -19,3 +19,4 @@ if __name__=="__main__":
         div_num(2,0)
     except CustomException as e:
         logger.error(str(e))
+

@@ -8,3 +8,9 @@ lightgbm
 mlflow
 flask
 pytest
+ipykernel
+seaborn
+statsmodels
+imbalanced-learn
+xgboost
+lightgbm

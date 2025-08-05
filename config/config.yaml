@@ -1,0 +1,5 @@
+data_ingestion:
+  bucket_name: "hrp_bucket_327"
+  bucket_file_name: "Hotel_Reservations.csv"
+  train_ratio: 0.8
+

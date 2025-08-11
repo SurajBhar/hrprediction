@@ -125,9 +125,18 @@ export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/your/credentials.json"
 
 ### Github Integration:
 - We will extract the code from the github repository.
+- Generate the github access token.
+- Connect the github repo to the jenkins project item/workspace.
+- Add a Jenkins file to the project.
+- Generate pipeline script for the project.
+- Add this script to the Jenkins file.
+- Test the build inside Jenkins dashboard.
+- Check the Console output for success/ failue of build.
+- Check the Workspace for the copied github repository.
 
 ### Dockerization of the project
-- Here we will create a Dockerfile.
+- Dockerfile to dockerize whole project.
+
 
 ### Create a virtual environment
 - This virtual environment will be inside the Jenkins pipeline.

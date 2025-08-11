@@ -1,0 +1,172 @@
+/* ---------- Theme ---------- */
+:root {
+  --bg: #f5f7fb;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --primary: #0f62fe;
+  --primary-hover: #0b4bcc;
+  --success-bg: #e8f5e9;
+  --success-text: #2e7d32;
+  --danger-bg: #fdecea;
+  --danger-text: #c62828;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: var(--text);
+  background: radial-gradient(1200px 700px at 10% -10%, #eef2ff 0%, transparent 60%),
+              radial-gradient(1000px 600px at 110% 10%, #e0f2fe 0%, transparent 55%),
+              var(--bg);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* ---------- Card ---------- */
+.container {
+  width: 100%;
+  max-width: 760px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+/* ---------- Heading ---------- */
+h1 {
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+h1 + p.subtitle {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Form ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 10px;
+}
+@media (min-width: 720px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 12px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="number"]::placeholder {
+  color: #9ca3af;
+}
+
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
+}
+
+/* Make the submit button span full width across grid */
+button.btn {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Button ---------- */
+.btn {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.02s ease;
+}
+.btn:hover {
+  background: var(--primary-hover);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Result ---------- */
+.result {
+  margin-top: 18px;
+  grid-column: 1 / -1;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fafafa;
+}
+.result p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.result p.good {
+  color: var(--success-text);
+  background: var(--success-bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.result p.bad {
+  color: var(--danger-text);
+  background: var(--danger-bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+  .container {
+    padding: 18px;
+    border-radius: 14px;
+  }
+  h1 {
+    font-size: 1.35rem;
+  }
+  .btn {
+    padding: 12px 14px;
+  }
+}

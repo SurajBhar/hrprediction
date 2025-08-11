@@ -6,5 +6,5 @@ logs/
 .pytest_cache
 __pycache__
 hrprediction.egg-info
-artifacts
 notebook/random_forest.pkl
+mlruns

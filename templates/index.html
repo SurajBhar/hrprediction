@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <title>Hotel Reservation Prediction</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Hotel Reservation Prediction</h1>
+
+    {# --- convenience variables for preserving selections --- #}
+    {% set f = request.form %}
+    {% set sel_month = f.get('arrival_month') %}
+    {% set sel_day = f.get('arrival_date') %}
+    {% set sel_segment = f.get('market_segment_type') %}
+    {% set sel_meal = f.get('type_of_meal_plan') %}
+    {% set sel_room = f.get('room_type_reserved') %}
+
+    {# months in display order; values match your model’s expected encoding #}
+    {% set months = [
+      (1,'January'), (2,'February'), (3,'March'), (4,'April'),
+      (5,'May'), (6,'June'), (7,'July'), (8,'August'),
+      (9,'September'), (10,'October'), (11,'November'), (12,'December')
+    ] %}
+
+    {# market segments (values must match training-time encoding) #}
+    {% set segments = [
+      (0,'Aviation'), (1,'Complimentary'), (2,'Corporate'), (3,'Offline'), (4,'Online')
+    ] %}
+
+    {# meal plans (values must match training-time encoding) #}
+    {% set meal_plans = [
+      (0,'Meal Plan 1'), (1,'Meal Plan 2'), (2,'Meal Plan 3'), (3,'Not Selected')
+    ] %}
+
+    {# room types (values must match training-time encoding) #}
+    {% set room_types = [
+      (0,'Room Type 1'), (1,'Room Type 2'), (2,'Room Type 3'),
+      (3,'Room Type 4'), (4,'Room Type 5'), (5,'Room Type 6'), (6,'Room Type 7')
+    ] %}
+
+    <form method="post" class="form-grid" novalidate>
+      <div class="form-group">
+        <label for="lead_time">Lead Time (days)</label>
+        <input
+          type="number"
+          id="lead_time"
+          name="lead_time"
+          min="0"
+          step="1"
+          placeholder="e.g., 14"
+          value="{{ f.get('lead_time','') }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="no_of_special_request">Number of Special Requests</label>
+        <input
+          type="number"
+          id="no_of_special_request"
+          name="no_of_special_request"
+          min="0"
+          step="1"
+          placeholder="e.g., 1"
+          value="{{ f.get('no_of_special_request','') }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="avg_price_per_room">Average Price per Room</label>
+        <input
+          type="number"
+          id="avg_price_per_room"
+          name="avg_price_per_room"
+          min="0"
+          step="0.01"
+          placeholder="e.g., 125.50"
+          value="{{ f.get('avg_price_per_room','') }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="arrival_month">Arrival Month</label>
+        <select id="arrival_month" name="arrival_month" required>
+          <option value="" disabled {{ 'selected' if not sel_month }}>Select month</option>
+          {% for val, label in months %}
+            <option value="{{ val }}" {{ 'selected' if sel_month == val|string }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="arrival_date">Arrival Day</label>
+        <select id="arrival_date" name="arrival_date" required>
+          <option value="" disabled {{ 'selected' if not sel_day }}>Select day</option>
+          {% for d in range(1, 32) %}
+            <option value="{{ d }}" {{ 'selected' if sel_day == d|string }}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="market_segment_type">Market Segment</label>
+        <select id="market_segment_type" name="market_segment_type" required>
+          <option value="" disabled {{ 'selected' if not sel_segment }}>Select segment</option>
+          {% for val, label in segments %}
+            <option value="{{ val }}" {{ 'selected' if sel_segment == val|string }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="no_of_week_nights">Week Nights</label>
+        <input
+          type="number"
+          id="no_of_week_nights"
+          name="no_of_week_nights"
+          min="0"
+          step="1"
+          placeholder="e.g., 3"
+          value="{{ f.get('no_of_week_nights','') }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="no_of_weekend_nights">Weekend Nights</label>
+        <input
+          type="number"
+          id="no_of_weekend_nights"
+          name="no_of_weekend_nights"
+          min="0"
+          step="1"
+          placeholder="e.g., 1"
+          value="{{ f.get('no_of_weekend_nights','') }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="type_of_meal_plan">Meal Plan</label>
+        <select id="type_of_meal_plan" name="type_of_meal_plan" required>
+          <option value="" disabled {{ 'selected' if not sel_meal }}>Select plan</option>
+          {% for val, label in meal_plans %}
+            <option value="{{ val }}" {{ 'selected' if sel_meal == val|string }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="room_type_reserved">Room Type Reserved</label>
+        <select id="room_type_reserved" name="room_type_reserved" required>
+          <option value="" disabled {{ 'selected' if not sel_room }}>Select room type</option>
+          {% for val, label in room_types %}
+            <option value="{{ val }}" {{ 'selected' if sel_room == val|string }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn">Predict</button>
+    </form>
+
+    {% if prediction is not none %}
+      <div class="result" aria-live="polite">
+        {% if prediction == 0 %}
+          <p class="bad">The customer is likely to <strong>cancel</strong> the reservation.</p>
+        {% elif prediction == 1 %}
+          <p class="good">The customer is likely to <strong>not cancel</strong> the reservation.</p>
+        {% else %}
+          <p>Prediction: {{ prediction }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

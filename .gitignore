@@ -7,3 +7,4 @@ logs/
 __pycache__
 hrprediction.egg-info
 artifacts
+notebook/random_forest.pkl

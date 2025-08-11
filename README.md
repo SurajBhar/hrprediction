@@ -78,3 +78,5 @@ export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/your/credentials.json"
 - Implemented utility functions module.
 - Implemented Data Ingestion module.
 - Performed Data Ingestion.
+- Notebook - EDA Complete.
+

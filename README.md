@@ -123,6 +123,8 @@ export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/your/credentials.json"
 
 ```
 
+---
+
 ### Github Integration:
 - We will extract the code from the github repository.
 - Generate the github access token.
@@ -134,16 +136,70 @@ export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/your/credentials.json"
 - Check the Console output for success/ failue of build.
 - Check the Workspace for the copied github repository.
 
+---
+
 ### Dockerization of the project
 - Dockerfile to dockerize whole project.
 
-
-### Create a virtual environment
+### Create a virtual environment inside the Jenkins container
 - This virtual environment will be inside the Jenkins pipeline.
+
+---
+
+### Install Google Cloud CLI in Jenkins Container
+Follow these commands to install the Google Cloud SDK inside the Jenkins container:
+
+    ```bash
+    docker exec -u root -it jenkins-dind bash
+    apt-get update
+    apt-get install -y curl apt-transport-https ca-certificates gnupg
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+    echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    apt-get update && apt-get install -y google-cloud-sdk
+    gcloud --version
+    exit
+    ```
+
+---
+
+### Grant Docker Permissions to Jenkins User
+
+1. **Grant Docker Permissions:**
+Run the following commands to give Docker permissions to the Jenkins user:
+
+    ```bash
+    docker exec -u root -it jenkins-dind bash
+    groupadd docker
+    usermod -aG docker jenkins
+    usermod -aG root jenkins
+    exit
+    ```
+
+2. **Restart Jenkins Container:**
+Restart the Jenkins container to apply changes.
+
+    ```bash
+    docker restart jenkins-dind
+    ```
+
+3. **Enable following API's in GCP**
+- Google Container Registry API
+- Artifact Registry API
+- Cloud Resorce Manager API
+
+---
 
 ### Build Docker image of the project
 - Here we will utilise the Dockerfile.
-- Build the docker image.
+- Build Docker Image for the Project
+    ```bash
+    docker build -t hrprediction_image .
+    ```
+- Run the Project Docker Container
+    ```bash
+    docker run -d -p 5000:5000 hrprediction_image
+    ```
+
 - Push the image to GCR (Google Cloud Registry).
 
 ### Extract and Push
@@ -175,4 +231,6 @@ export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/your/credentials.json"
 - Flask API/ application build.
 - Flask application tested.
 - CI/CD Process Workflow Complete
-- 
+- Updates in Jenkins file.
+- Implemented Dockerfile for the project.
+

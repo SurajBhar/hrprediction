@@ -33,26 +33,8 @@ from config.path_config import (
     MODEL_OUTPUT_PATH,
 )
 
-# Optional: load environment variables from .env if present
-try:  # pragma: no cover - optional convenience
-    from dotenv import load_dotenv  # type: ignore
-
-    _ROOT = Path(__file__).resolve().parents[1]
-    _ENV = _ROOT / ".env"
-    if _ENV.exists():
-        load_dotenv(dotenv_path=_ENV)
-except Exception:
-    pass
 
 logger = get_logger(__name__)
-
-
-def _check_prereqs() -> None:
-    """Log helpful hints if common env configuration is missing."""
-    if not os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
-        logger.warning(
-            "GOOGLE_APPLICATION_CREDENTIALS is not set. GCS access may fail."
-        )
 
 
 def run_pipeline(config_path: Path | str = CONFIG_PATH) -> None:
@@ -68,7 +50,6 @@ def run_pipeline(config_path: Path | str = CONFIG_PATH) -> None:
     logger.info("Pipeline started")
 
     try:
-        _check_prereqs()
 
         # Load config once and pass where needed
         config = read_yaml(config_path)

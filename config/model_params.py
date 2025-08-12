@@ -9,8 +9,8 @@ LIGHTGM_PARAMS={
 }
 
 RANDOM_SEARCH_PARAMS = {
-    'n_iter' : 30,
-    'cv' : 5,
+    'n_iter' : 5,
+    'cv' : 2,
     'n_jobs':-1,
     'verbose' :2,
     'random_state' : 42,

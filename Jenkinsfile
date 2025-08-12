@@ -79,7 +79,7 @@ pipeline {
                             --image=${DOCKER_IMAGE}:${GIT_COMMIT} \
                             --platform=managed \
                             --region=us-central1 \
-                            --port=8080 \
+                            --port=5000 \
                             --allow-unauthenticated
                     '''
                 }
